@@ -63,6 +63,12 @@ public class BookService {
         return list;
     }
 
+    public Optional<Book> getBook(String name, Author author, Genre genre, Publisher publisher,
+                                  Integer year, String city){
+        Book book = new Book(name,author,genre,publisher,year,city);
+        return bookRepo.findOne(Example.of(book));
+    }
+
     public void save(Book book){
         bookRepo.save(book);
     }

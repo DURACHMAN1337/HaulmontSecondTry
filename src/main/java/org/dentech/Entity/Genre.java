@@ -28,7 +28,7 @@ public class Genre extends AbstractEntityClass implements Comparable<Genre>{
     @Override
     public String toString() {
         return
-                "Жанр :" + this.title;
+                "Жанр : " + this.title;
 
     }
 

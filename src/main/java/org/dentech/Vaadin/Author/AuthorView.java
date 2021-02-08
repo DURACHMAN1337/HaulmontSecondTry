@@ -50,7 +50,7 @@ public class AuthorView extends VerticalLayout implements View {
         addComponent(buttonsLayout);
 
         authorGrid.setSizeFull();
-        authorGrid.setColumns("firstname","surname","patronymic");
+        authorGrid.setColumns("surname","firstname","patronymic");
         authorGrid.setItems(authorService.getAll());
 
         addComponent(authorGrid);

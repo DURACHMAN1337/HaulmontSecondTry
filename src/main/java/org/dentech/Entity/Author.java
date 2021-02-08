@@ -38,9 +38,7 @@ public class Author extends AbstractEntityClass implements Comparable<Author> {
     @Override
     public String toString() {
         return
-                "Имя : " + this.firstname +
-                        " Фамилия : " + this.surname +
-                        " Отчество : " + this.patronymic;
+                "ФИО : " + this.surname + " " + this.firstname + " " + this.patronymic;
     }
 
     @Override
