@@ -57,7 +57,7 @@ public class BookService {
     public List<Book> getBooksByGenre(Genre genre){
         List<Book> list = new ArrayList<>();
         for (Book book : bookRepo.findAll()){
-            if(book.getGenre() == genre)
+            if(book.getGenre().getTitle().equals(genre.getTitle()) )
                 list.add(book);
         }
         return list;

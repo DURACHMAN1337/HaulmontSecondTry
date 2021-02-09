@@ -35,12 +35,10 @@ public class AuthorWindow extends Window implements View {
         VerticalLayout main = new VerticalLayout();
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         HorizontalLayout row1 = new HorizontalLayout();
-        HorizontalLayout row2 = new HorizontalLayout();
+
         buttonsLayout.addComponents(saveButton, cancelButton);
-        row1.addComponents(firstnameField, surnameField);
-        row2.addComponents(patronymicField);
-        row2.setComponentAlignment(patronymicField, Alignment.MIDDLE_CENTER);
-        main.addComponents(row1, row2, buttonsLayout);
+        row1.addComponents(surnameField,firstnameField,patronymicField);
+        main.addComponents(row1, buttonsLayout);
 
         try {
             firstnameField.setValue(author.getFirstname());

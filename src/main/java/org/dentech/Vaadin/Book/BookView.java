@@ -1,20 +1,17 @@
 package org.dentech.Vaadin.Book;
-
 import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.dentech.Entity.Book;
-import org.dentech.Entity.Genre;
 import org.dentech.Services.AuthorService;
 import org.dentech.Services.BookService;
 import org.dentech.Services.GenreService;
-import org.dentech.Vaadin.Genre.GenreWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -71,17 +68,33 @@ public class BookView extends VerticalLayout implements View {
 
         addButton.addClickListener(e -> {
             Book book = new Book();
-            BookWindow bookWindow = new BookWindow(bookService,book,authorService,genreService);
+            BookWindow bookWindow = new BookWindow(bookService, book, authorService, genreService);
 
             getUI().addWindow(bookWindow);
         });
 
         editButton.addClickListener(e -> {
             Book book = bookGrid.asSingleSelect().getValue();
-            BookWindow bookWindow = new BookWindow(bookService,book,authorService,genreService);
+            BookWindow bookWindow = new BookWindow(bookService, book, authorService, genreService);
             getUI().addWindow(bookWindow);
         });
+        deleteButton.addClickListener(clickEvent -> {
+            Book book = bookGrid.asSingleSelect().getValue();
 
+            try {
+                bookService.delete(book);
+                updateBookGrid(bookService);
+                Notification notification = new Notification(book.toString() + " была успешно удалена",
+                        Notification.Type.WARNING_MESSAGE);
+                notification.setDelayMsec(1500);
+                notification.setPosition(Position.BOTTOM_CENTER);
+                notification.show(getUI().getPage());
+            } catch (Exception deleteException) {
+                Notification notification = new Notification("Что-то пошло не так :С",
+                        Notification.Type.WARNING_MESSAGE);
+                notification.show(getUI().getPage());
+            }
+        });
 
 
     }
@@ -103,7 +116,6 @@ public class BookView extends VerticalLayout implements View {
         publisherFiled.setPlaceholder("Издательство");
 
 
-
         nameField.addValueChangeListener(this::nameFilter);
         authorField.addValueChangeListener(this::authorFilter);
         publisherFiled.addValueChangeListener(this::publisherFilter);
@@ -115,7 +127,7 @@ public class BookView extends VerticalLayout implements View {
         return mainLayout;
     }
 
-    private void nameFilter(HasValue.ValueChangeEvent<String> stringValueChangeEvent){
+    private void nameFilter(HasValue.ValueChangeEvent<String> stringValueChangeEvent) {
         ListDataProvider<Book> dataProvider = (ListDataProvider<Book>) bookGrid.getDataProvider();
         dataProvider.setFilter(Book::getName, name ->
                 name.toLowerCase().contains(stringValueChangeEvent.getValue().toLowerCase()));
@@ -127,9 +139,9 @@ public class BookView extends VerticalLayout implements View {
                 author.toString().toLowerCase().contains(stringValueChangeEvent.getValue().toLowerCase()));
     }
 
-    private void publisherFilter(HasValue.ValueChangeEvent<String> stringValueChangeEvent){
+    private void publisherFilter(HasValue.ValueChangeEvent<String> stringValueChangeEvent) {
         ListDataProvider<Book> dataProvider = (ListDataProvider<Book>) bookGrid.getDataProvider();
-        dataProvider.setFilter(Book::getPublisher,publisher ->
+        dataProvider.setFilter(Book::getPublisher, publisher ->
                 publisher.toString().toLowerCase().contains(stringValueChangeEvent.getValue().toLowerCase()));
     }
 
